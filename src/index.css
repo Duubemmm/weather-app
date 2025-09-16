@@ -1,1 +1,35 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap');
+
+@theme {
+--font-display: "Bricolage Grotesque";
+--font-weight: 700;
+
+--color-900: #03012dff;
+--color-800:  #272541ff;
+--color-700: #312f4bff;
+--color-600: #3d3b5eff;
+--color-300:  #aeaeb7ff;
+--color-200:  #d5d4d9ff;
+--color-0:  #ffffffff;
+--colorBlue-500: #4455daff;
+--colorBlue-700:  #2d1c9cff;
+
+}
+
+@layer base {
+  .bricolage-grotesque-weather {
+  font-family: "Bricolage Grotesque";
+  font-optical-sizing: auto;
+  font-weight: 200;
+  font-style: normal;
+  font-variation-settings:"wdth" 100;
+}
+}
+@layer components {
+  .background {
+    background-image: url("/public/bg-today-large.svg");
+    background-position: center;
+    padding: 4px;
+  }
+}
