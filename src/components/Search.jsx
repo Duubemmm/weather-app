@@ -27,7 +27,7 @@ const Search = () => {
             type="search" 
             placeholder="Search for a place..."
             aria-label="Search for a place" 
-            className="w-full bg-transparent text-0 placeholder:text-0 focus:outline-none"
+            className="w-full bg-transparent text-0"
           />
         </div>
 

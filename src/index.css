@@ -1,5 +1,5 @@
-@import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap');
+@import "tailwindcss";
 
 @theme {
 --font-display: "Bricolage Grotesque";
@@ -17,19 +17,3 @@
 
 }
 
-@layer base {
-  .bricolage-grotesque-weather {
-  font-family: "Bricolage Grotesque";
-  font-optical-sizing: auto;
-  font-weight: 200;
-  font-style: normal;
-  font-variation-settings:"wdth" 100;
-}
-}
-@layer components {
-  .background {
-    background-image: url("/public/bg-today-large.svg");
-    background-position: center;
-    padding: 4px;
-  }
-}

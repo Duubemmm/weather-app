@@ -14,7 +14,7 @@ const LocationForecast = () => {
 
   return (
     <section className="max-w-3xl mx-auto">
-      <div className="text-white background p-6 flex flex-col items-center justify-center text-center sm:items-start sm:text-left">
+      <div className="text-white bg-[url(/bg-today-small.svg)] bg-cover bg-center bg-no-repeat px-6 py-20 md:flex-row md:bg-[url(/bg-today-large.svg)] p-6 flex flex-col items-center justify-center text-center sm:items-start sm:text-left">
         <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
           {location}
         </h1>
