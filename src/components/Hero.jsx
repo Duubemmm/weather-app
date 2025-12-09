@@ -1,9 +1,9 @@
-import Search from "./Search"
+import SearchBar from "./SearchBar"
 const Hero = () => {
     return (
         <section>
-            <h1 className="text-white text-center text-4xl font-extrabold mb-3 font-display">How's the sky looking today?</h1>
-       <Search/>
+            <h1 className="text-white text-center text-2xl mb-4.5">How's the sky looking today</h1>
+       <SearchBar/>
         </section>
     )
 

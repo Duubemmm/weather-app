@@ -1,38 +1,54 @@
-const BASE_GEO_URL = "https://geocoding-api.open-meteo.com/v1/search";
-const BASE_WEATHER_URL = "https://api.open-meteo.com/v1/forecast";
-
-// helper to fetch with error handling
-const fetchJSON = async (url) => {
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
-  return res.json();
-};
-
-// 1. Get coordinates by city name
-export const fetchCoordinates = async (city) => {
-  const url = `${BASE_GEO_URL}?name=${encodeURIComponent(city)}&count=1`;
-  const data = await fetchJSON(url);
-
-  if (!data.results || data.results.length === 0) {
-    throw new Error("City not found");
+export async function getCoordinates(locationName){
+  const GEOCODING_URL = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(locationName)}&count=1&language=en&format=json`;
+  const response = await fetch(GEOCODING_URL);
+if (!response.ok) {
+      throw new Error(`Geocoding failed: ${response.status}`);
+    }
+  const responseData = await response.json()
+    if (!responseData.results || responseData.results.length === 0) {
+      throw new Error(`Location not found for: ${locationName}`);
   }
+  const locationData = responseData.results[0]
+       return {
+       name: locationData.name,
+       country: locationData.country,
+       latitude: locationData.latitude,
+       longitude: locationData.longitude,
+     };
+}
 
-  return data.results[0]; // { latitude, longitude, name, country }
-};
+export async function getWeather(latitude, longitude, units = {}) {
+  const params = new URLSearchParams({
+    latitude,
+    longitude,
+    daily: "weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_probability_max",
+    hourly: "weather_code,temperature_2m,precipitation,apparent_temperature,wind_speed_10m,relative_humidity_2m",
+    current: "temperature_2m,apparent_temperature,relative_humidity_2m,weather_code,precipitation,wind_speed_10m,uv_index,visibility,surface_pressure,cloud_cover,is_day",
+    ...units, 
+  });
+  
+  const WEATHER_URL = `https://api.open-meteo.com/v1/forecast?${params.toString()}`;
+  const response = await fetch(WEATHER_URL);
+  
+  if (!response.ok) {
+    throw new Error(`Weather fetch failed: ${response.status}`);
+  }
+  
+  const responseData = await response.json();
+  return responseData;
+}
 
-// 2. Get weather by coordinates
-export const fetchWeather = async (latitude, longitude) => {
-  const url = `${BASE_WEATHER_URL}?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m`;
-  return fetchJSON(url);
-};
-
-// 3. Main function: get weather by city name
-export const fetchWeatherForCity = async (city) => {
-  const { latitude, longitude, name, country } = await fetchCoordinates(city);
-  const forecast = await fetchWeather(latitude, longitude);
-
-  return {
-    location: { name, country, latitude, longitude },
-    forecast,
-  };
-};
+export async function getWeatherByLocation(locationName) {
+    const coords = await getCoordinates(locationName);
+    
+    if (!coords) {
+      return null;
+    }
+    
+    const weather = await getWeather(coords.latitude, coords.longitude);
+    
+    return { 
+      coords, 
+      weather 
+    };
+}
