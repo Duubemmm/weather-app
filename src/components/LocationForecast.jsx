@@ -1,5 +1,6 @@
 import SunIcon from "/icon-sunny.webp";
 import useWeatherStore from "../store/WeatherStore";
+import Loading from "../pages/LoadingPage"
 
 const LocationForecast = () => {
   const { 
@@ -18,9 +19,7 @@ const LocationForecast = () => {
   if (isFetching) {
     return (
       <section className="max-w-3xl mx-auto bg-[url(/bg-today-small.svg)]">
-        <div className="text-white text-center py-20">
-          Loading weather data...
-        </div>
+       <Loading/>
       </section>
     );
   }
@@ -51,6 +50,7 @@ const LocationForecast = () => {
   const humidity = weatherData.current.relative_humidity_2m;
   const windSpeed = weatherData.current.wind_speed_10m;
   const precipitation = weatherData.current.precipitation;
+  // const timezone = weatherData.location.timezone
 
   const WeatherMetrics = [
     { Metric: "Feels like", Value: `${feelsLike}°` },
@@ -76,6 +76,7 @@ const LocationForecast = () => {
           <span className="text-5xl md:text-6xl font-light">
             {temperature}°
           </span>
+          {/* <span>{timezone}</span> */}
         </div>
       </div>
 

@@ -1,6 +1,5 @@
 export async function searchLocation(locationName) {
- 
-  const SEARCHLOCATION_URL = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(locationName)}&format=json&limit=5&addressdetails=1`;
+  const SEARCHLOCATION_URL = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(locationName)}&count=5&language=en&format=json`;
 
   const response = await fetch(SEARCHLOCATION_URL);
 
@@ -8,28 +7,31 @@ export async function searchLocation(locationName) {
     throw new Error(`Location search failed: ${response.status}`);
   }
 
-  const locationData = await response.json();
+  const data = await response.json();
 
-  if (!locationData || locationData.length === 0) {
+  if (!data.results || data.results.length === 0) {
     throw new Error(`No results found for "${locationName}"`);
   }
 
-  // Return multiple results so user can choose if needed
-  return locationData.map(location => ({
-    name: location.display_name,
-    latitude: parseFloat(location.lat),
-    longitude: parseFloat(location.lon),
-    city: location.address?.city || location.address?.town || location.address?.village || "",
-    country: location.address?.country || "",
-    state: location.address?.state || "",
+  return data.results.map(location => ({
+    name: location.name,
+    latitude: location.latitude,
+    longitude: location.longitude,
+    city: location.name,
+    country: location.country || "",
+    state: location.admin1 || "",
+    timezone: location.timezone || "",
   }));
 }
 
-// 2. REVERSE GEOCODING: Coordinates → location details (for geolocation)
 export async function getLocationDetails(latitude, longitude) {
   const NOMINATIM_URL = `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json&addressdetails=1&accept-language=en`;
 
-  const response = await fetch(NOMINATIM_URL);
+  const response = await fetch(NOMINATIM_URL, {
+    headers: {
+      'User-Agent': 'WeatherApp/1.0' 
+    }
+  });
 
   if (!response.ok) {
     throw new Error(`Reverse geocoding failed: ${response.status}`);
@@ -47,8 +49,10 @@ export async function getLocationDetails(latitude, longitude) {
     address.city ||
     address.town ||
     address.village ||
-    address.county ||
-    responseData.display_name.split(",")[0].trim();
+    address.county || ""
+    // responseData.display_name.split(",")[0].trim();
+
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   return {
     name: city,
@@ -56,6 +60,7 @@ export async function getLocationDetails(latitude, longitude) {
     latitude: parseFloat(latitude),
     longitude: parseFloat(longitude),
     state: address.state || address.province || "",
+    timezone: timezone,
   };
 }
 
@@ -66,6 +71,7 @@ export async function getWeather(latitude, longitude, units = {}) {
     daily: "weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_probability_max",
     hourly: "weather_code,temperature_2m,precipitation,apparent_temperature,wind_speed_10m,relative_humidity_2m",
     current: "temperature_2m,apparent_temperature,relative_humidity_2m,weather_code,precipitation,wind_speed_10m,uv_index,visibility,surface_pressure,cloud_cover,is_day",
+    timezone: "auto", 
     ...units,
   });
 
