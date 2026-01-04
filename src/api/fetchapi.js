@@ -50,7 +50,6 @@ export async function getLocationDetails(latitude, longitude) {
     address.town ||
     address.village ||
     address.county || ""
-    // responseData.display_name.split(",")[0].trim();
 
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 

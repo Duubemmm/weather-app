@@ -1,5 +1,5 @@
 import WeatherLogo from "/logo.svg";
-import UnitDisplay from "./UnitDisplay.jsx"
+// import UnitDisplay from "./UnitDisplay.jsx"
 
 const Header = () => {
   return (
@@ -8,7 +8,7 @@ const Header = () => {
         <a href="/" aria-label="Weather App Home">
           <img src={WeatherLogo} alt="Weather App Logo" className="w-45 h-auto" />
         </a>
-        <UnitDisplay/>
+        {/* <UnitDisplay/> */}
       </nav>
     </header>
   );

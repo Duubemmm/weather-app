@@ -51,7 +51,6 @@ const SearchBar = () => {
   const handleSearch = async (e) => {
     e.preventDefault();
     if (inputValue.trim() && searchResults.length > 0) {
-      // Select first result
       await handleSelectLocation(searchResults[0]);
     }
   };
@@ -122,7 +121,7 @@ const SearchBar = () => {
           <button
             type="submit"
             disabled={isFetching || !inputValue.trim()}
-            className="flex-1 sm:flex-none bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 sm:flex-none bg-blue-800 text-white px-6 py-3 rounded-lg font-semibold shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isFetching ? "Searching..." : "Search"}
           </button>
